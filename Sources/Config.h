@@ -10,6 +10,6 @@
 #define APP_STAR_ADDR		0x20000
 #define APP_MAX_ADDR		0x3D000
 #define APP_CHECK_STRING	"CHECK OK"
-#define APP_TIMEOUT			2000
+#define APP_TIMEOUT			200
 
 #endif

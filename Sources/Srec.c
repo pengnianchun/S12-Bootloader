@@ -213,7 +213,7 @@ UINT8 ProgramFlash(void)
       break;
     
     if (ProgSRec.RecType == EndRec){ // S7, S* or S9 record? 
-      PFlash_Program(0x3FB00,(UINT16 *)APP_CHECK_STRING);
+      PFlash_Program(0x3EE00,(UINT16 *)APP_CHECK_STRING);
       break;                        // yes. return 
     }
     else if (ProgSRec.RecType == HeaderRec)       //S0 record?
