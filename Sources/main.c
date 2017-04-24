@@ -50,6 +50,7 @@ static void CopyCodeToRAM(void)
 }
 
 
+
 void main(void) {
     unsigned int  timeout;
 	
@@ -71,7 +72,7 @@ void main(void) {
 		        tmp = CheckApp();
 		        if (tmp == 0){
 		          DisableInterrupts;
-		            asm call 0xC000,00;
+		          asm call 0xC000,00;
 		        }
 		   }
 		}

@@ -1,5 +1,6 @@
 #include <hidef.h>
 #include <stdio.h>
+#include <string.h>
 #include "derivative.h" /* include peripheral declarations */
 #include "S12_COMMON.h"
 #include "global.h"
@@ -115,12 +116,12 @@ void CanInit(void)
 	CANIDMR2 = 0xFFU;
 	/* CANIDMR3: AM7=0,AM6=0,AM5=0,AM4=0,AM3=0,AM2=0,AM1=0,AM0=0 */
 	CANIDMR3 = 0xFFU;
-	/* CANIDMR4: AM7=0,AM6=0,AM5=0,AM4=0,AM3=0,AM2=0,AM1=0,AM0=0 */
+	/* CANIDMR4: AM7=0,AM6=0,AM5=0,AM4=0,AM3=0,AM2=0,AM1=0,AM0=0 */    
 	CANIDMR4 = 0x00U;
 	/* CANIDMR5: AM7=0,AM6=0,AM5=0,AM4=0,AM3=0,AM2=0,AM1=0,AM0=0 */
 	CANIDMR5 = 0x00U;
 	/* CANIDMR6: AM7=0,AM6=0,AM5=0,AM4=0,AM3=0,AM2=0,AM1=0,AM0=0 */
-	CANIDMR6 = 0x00U;
+	CANIDMR6 = 0x00U;                                                  
 	/* CANIDMR7: AM7=0,AM6=0,AM5=0,AM4=0,AM3=0,AM2=0,AM1=0,AM0=0 */
 	CANIDMR7 = 0x00U;
 
@@ -444,18 +445,19 @@ void ExecutiveWriteBlockFlashHandle(can_msg *pRxMessage)
 		CanStop = 1;
 	}
 }
+
 UINT8 CheckApp(void)
 {
 	UINT8   out;
 	UINT8 *Src;
 	int i;
 	unsigned char tmp[8];
-	Src = (UINT8 *)0xFB00;
+	Src = (UINT8 *)0xEE00;
 	for(i=0;i<8;i++){
 		tmp[i] = Src[i];
 	}
 	
-	out = strncmp(APP_CHECK_STRING,tmp,8);
+	out = strncmp(APP_CHECK_STRING,Src,8);
 	return out;
 }
 void ExecutiveAppHandle(can_msg *pRxMessage) {
