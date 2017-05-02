@@ -189,7 +189,7 @@ Bool MSCANSendMsg(can_msg msg)
   }
   
   while(!send_buf); 
-  CANTXIDR1_IDE =1;
+  
   // 写入标识符
   //CANTXIDR0 = (unsigned char)(msg.id>>3);
   //CANTXIDR1 = (unsigned char)(msg.id<<5);
@@ -199,6 +199,8 @@ Bool MSCANSendMsg(can_msg msg)
   CANTXIDR1_ID_15 = (msg.id>>15)&0x00000007;
   CANTXIDR1_ID_18 = (msg.id>>18)&0x00000007;
   CANTXIDR0 = (msg.id>>21)&0x000000FF;
+  CANTXIDR1_IDE =1;//设置成扩展帧模式
+  CANTXIDR3_RTR = 0;//设置为数据帧
   if(msg.RTR)
     // RTR = 阴性
     CANTXIDR1 |= 0x10;
