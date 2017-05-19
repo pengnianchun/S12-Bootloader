@@ -363,6 +363,7 @@ void ExecutiveCheckHandle(can_msg *pRxMessage)
  */
 int IsRxEmpty(void)
 {
+  _FEED_COP();
 	if (CanStop == 0){
 		return 1;
 	}
@@ -408,6 +409,7 @@ void ExecutiveEraseFlashHandle(can_msg *pRxMessage)
 		if(err != noErr)
 			break;
 		addr += 0x200;
+		_FEED_COP();
 	}
 	(void)MSCANSendMsg(tx_msg);
 	
