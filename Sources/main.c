@@ -74,7 +74,7 @@ void main(void) {
     for(;;){
 		if(TimeOutConfig){
 		   TimeOutConfig = 0;
-		   timeout++;
+		   timeout--;
 		   if(timeout ==0){
 		      UINT8 tmp;
 		      TIE   = 0;//关定时中断
