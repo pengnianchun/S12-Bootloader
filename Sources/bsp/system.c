@@ -25,6 +25,7 @@ void SystemClockInit(void)
 	}
 	/* CPMUPROT: PROT=0 */
 	CPMUPROT = 0x00U;                    /* Enable protection of clock configuration registers */  
+//	CPMUCOP = 0x07;//使能看门狗
 }
 
 /************************************************************/

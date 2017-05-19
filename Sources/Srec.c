@@ -208,12 +208,22 @@ UINT8 ProgramFlash(void)
 
   for(;;)
   {
+    _FEED_COP();
     Error = RcvSRecord(&ProgSRec);
     if (Error != noErr) //go get an S-Record, return if there was an error 
       break;
     
     if (ProgSRec.RecType == EndRec){ // S7, S* or S9 record? 
-      PFlash_Program(0x3EE00,(UINT16 *)APP_CHECK_STRING);
+ #ifdef CHECK_TYPE
+      UINT8 * Src;
+      int temp;
+      Src = (UINT8 *)0x4000;
+      temp = strncmp(Src,CHECK_TYPE,sizeof(CHECK_TYPE));
+      if (0 == temp) 
+#endif
+	  { 
+        PFlash_Program(0x3EE00,(UINT16 *)APP_CHECK_STRING);
+      }
       break;                        // yes. return 
     }
     else if (ProgSRec.RecType == HeaderRec)       //S0 record?

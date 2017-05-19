@@ -53,20 +53,29 @@ static void CopyCodeToRAM(void)
 
 void main(void) {
     unsigned int  timeout;
-	
+	  int IsReset;
     DisableInterrupts;
+    IVBR = 0xFFU; //设置中断映射 
     SystemClockInit();
   	Flash_Init();
   	CopyCodeToRAM();
     CanInit();
     initialize_TIM();
     EnableInterrupts;
-    timeout = 0;
+	timeout = APP_TIMEOUT;
+    if (CPMUFLG_PORF == 0) {
+        IsReset = 1;
+		timeout = 1000;
+         //TIE   = 0;//关定时中断
+         //ExecutiveEraseFlashHandle(NULL);//擦除程序区
+    }
+    
+    
     for(;;){
 		if(TimeOutConfig){
 		   TimeOutConfig = 0;
 		   timeout++;
-		   if(timeout>=APP_TIMEOUT){
+		   if(timeout ==0){
 		      UINT8 tmp;
 		      TIE   = 0;//关定时中断
 		        tmp = CheckApp();
@@ -81,6 +90,5 @@ void main(void) {
 		{
 			ProgramFlash();
 		}
-		
     }
 }
