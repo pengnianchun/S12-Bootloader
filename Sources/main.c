@@ -64,6 +64,7 @@ void main(void) {
     EnableInterrupts;
 	timeout = APP_TIMEOUT;
     if (CPMUFLG_PORF == 0) {
+    
         IsReset = 1;
 		timeout = 1000;
          //TIE   = 0;//关定时中断
