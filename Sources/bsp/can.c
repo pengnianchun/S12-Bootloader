@@ -325,7 +325,6 @@ typedef struct _ExecutiveCommandType
 ExecutiveCommandType;
 
 volatile CAN_DATA_FIFO rx_buf;
-
 void CAN_BOOT_ExecutiveCommandHandle(can_msg *pRxMessage,ExecutiveCommandType *Table,int size)
 {
 	int i;
