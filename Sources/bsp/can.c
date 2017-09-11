@@ -28,6 +28,10 @@ void CanInit(void)
 	CAN_CanRxMsgFlag = 0;
 	CanStop = 0;
 	memset(&msg_get,0,sizeof(can_msg));
+	DDRA_DDRA3 = 1;
+	DDRP_DDRP3 = 1;
+	DDRP_DDRP6 = 0;
+	can_chip_mode_switch(NORMAL_MODE);//!<设置进入正常模式
 	CANCTL0 = 0x01;           /* Enter Initialization Mode
                                *
                                *  0b00000001
@@ -485,5 +489,24 @@ void CAN_BOOT_ExecutiveCommand(void)
 	if (CAN_CanRxMsgFlag){
 		CAN_BOOT_ExecutiveCommandHandle(&msg_get,commandTable,sizeof(commandTable)/sizeof(ExecutiveCommandType));
 		CAN_CanRxMsgFlag = 0;
+	}
+}
+void can_chip_mode_switch(can_mode_t mode)
+{
+	switch(mode)
+	{
+		case NORMAL_MODE:
+			CAN_EN = 1;
+			CAN_BTS = 1;
+			break;
+		case STANDBY_MODE:
+			CAN_EN = 0;
+			CAN_BTS = 0;
+			break;
+		case GO_TO_SLEEP_MODE:
+			CAN_EN = 1;
+			CAN_BTS = 0;
+			break;
+		default:break;
 	}
 }
