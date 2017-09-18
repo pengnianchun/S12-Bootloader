@@ -281,14 +281,17 @@ static Bool MSCANGetMsg(can_msg *msg)
 #pragma CODE_SEG __NEAR_SEG NON_BANKED
 void interrupt CAN_receive(void) 
 {
-      if(MSCANGetMsg(&msg_get)) 
+	//!<2017-9-16:使用临时变量进行缓存,防止无效数据干扰;
+	can_msg msg_temp;
+      if(MSCANGetMsg(&msg_temp)) 
       {
         // 接收新信息
         unsigned long can_addr;
-		can_addr = msg_get.id>>CMD_WIDTH;//ID的bit4~bit15位为节点地址)
+		can_addr = msg_temp.id>>CMD_WIDTH;//ID的bit4~bit15位为节点地址)
 		if(CAN_TX_ID != can_addr)
 			return ;
-        	CAN_CanRxMsgFlag = 1;
+		memcpy(&msg_get,&msg_temp,sizeof(can_msg));
+		CAN_CanRxMsgFlag = 1;
       }
       else 
       {
@@ -400,13 +403,14 @@ void GetRxBuffer(unsigned  char * buffer, int len)
 
 void ExecutiveEraseFlashHandle(can_msg *pRxMessage)
 {
+	//!<擦除过程中关闭中断,防止程序异常;
 	unsigned long addr;
 	ERROR_TYPE err = EraseFlashID;
 	can_msg tx_msg;
 	tx_msg.id = CAN_TX_ID<<4;
 	tx_msg.id |= EraseFlashID;
 	tx_msg.len = 0;
-	
+	DisableInterrupts;
 	for (addr = APP_STAR_ADDR;addr<APP_MAX_ADDR;){
 		err = PFlash_EraseSector(addr);
 		if(err != noErr)
@@ -414,6 +418,7 @@ void ExecutiveEraseFlashHandle(can_msg *pRxMessage)
 		addr += 0x200;
 		_FEED_COP();
 	}
+	EnableInterrupts;
 	(void)MSCANSendMsg(tx_msg);
 	
 }

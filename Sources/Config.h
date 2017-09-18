@@ -6,8 +6,8 @@
 #define USER_DIVER		BINGO_DIVER
 
 #define VERSIONS_MAJOR	(2u)
-#define VERSIONS_MINOR	(3u)
-#define VERSIONS	"S12 boot V2.3 2017-09-08"
+#define VERSIONS_MINOR	(4u)
+#define VERSIONS	"S12 boot V2.4 2017-09-06"
 #define CAN_BL_BOOT	(0x0u)
 
 #define CAN_TX_ID	(USER_DIVER)
@@ -24,6 +24,8 @@
 #endif
 /**
  *********************************************************************
+  2017-9-16 11:22:40
+  1.修改can接收部分代码,解决不能在整车环境下升级程序的BUG
   2017-9-8 19:33:42
   1.匹配FY169-Dragon-V3.0控制板 修改can发送器配置
 	2017-5-19 17:32:03
