@@ -243,8 +243,8 @@ UINT8 ProgramFlash(void)
       } 
       else 
       {
-        //is the address within a physical flash?
-        if (!((ProgSRec.LoadAddr >= 0x020000UL) && (ProgSRec.LoadAddr <= 0x03EFDFUL)))
+        //is the address within a physical flash?                        
+        if (!((ProgSRec.LoadAddr >= 0x020000UL) && (ProgSRec.LoadAddr <= 0x03EF9cUL)))
 			return(SRecRangeError); 
         
         

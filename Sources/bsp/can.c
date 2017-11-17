@@ -28,9 +28,16 @@ void CanInit(void)
 	CAN_CanRxMsgFlag = 0;
 	CanStop = 0;
 	memset(&msg_get,0,sizeof(can_msg));
+#ifdef EXTINGUISHER
+	DDRM_DDRM2 = 1;
+	DDRS_DDRS6 = 1;
+	DDR1AD_DDR1AD5= 0;
+#else
 	DDRA_DDRA3 = 1;
 	DDRP_DDRP3 = 1;
 	DDRP_DDRP6 = 0;
+
+#endif
 	can_chip_mode_switch(NORMAL_MODE);//!<设置进入正常模式
 	CANCTL0 = 0x01;           /* Enter Initialization Mode
                                *
@@ -317,8 +324,8 @@ void interrupt CAN_receive(void)
 typedef struct 
 {
 	char buf[BUFFER_SIZE];
-	int r;
-	int w;
+	unsigned int r;
+	unsigned int w;
 }
 CAN_DATA_FIFO;
 
@@ -375,17 +382,22 @@ int IsRxEmpty(void)
 	}
 	return rx_buf.w == rx_buf.r;
 }
-UINT8 Getchar(void)
+void WriteBlockFlashResponse(void)
 {
 	can_msg tx_msg;
+	if (1 == CanStop){
+		tx_msg.id = (CAN_TX_ID<<4) | WriteBlockFlashID;
+		tx_msg.len = 0;
+		(void)MSCANSendMsg(tx_msg);
+		CanStop = 0;
+	}
+}
+UINT8 Getchar(void)
+{
+	
 	while(IsRxEmpty())
 	{
-		if (1 == CanStop){
-			tx_msg.id = (CAN_TX_ID<<4) | WriteBlockFlashID;
-			tx_msg.len = 0;
-			(void)MSCANSendMsg(tx_msg);
-			CanStop = 0;
-		}
+		WriteBlockFlashResponse();
 		CAN_BOOT_ExecutiveCommand();
 	}
 	return rx_buf.buf[(rx_buf.r++)&(BUFFER_SIZE-1)];
