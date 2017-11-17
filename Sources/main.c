@@ -91,5 +91,9 @@ void main(void) {
 		{
 			ProgramFlash();
 		}
+		else
+		{
+			WriteBlockFlashResponse();
+		}
     }
 }
